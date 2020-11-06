@@ -1,0 +1,22 @@
+ext {
+    aitoInstanceUrl = {
+        def properties = aitoProperties()
+        return properties['AITO_INSTANCE_URL']
+    }
+
+    aitoApiKey = {
+        def properties = aitoProperties()
+        return properties['AITO_API_KEY']
+    }
+
+    aitoProperties = {
+        File propertyFile = rootProject.file("aito.properties")
+        Properties properties = new Properties()
+        if (propertyFile.canRead()) {
+            properties.load(new FileInputStream(propertyFile))
+        } else {
+            println("GradleException: Unable to read file aito.properties")
+        }
+        return properties
+    }
+}
