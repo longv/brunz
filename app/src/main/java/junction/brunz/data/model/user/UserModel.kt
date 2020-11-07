@@ -28,7 +28,7 @@ data class UserModel(
   @SerializedName("weight") val weight: Int = 65,
   @SerializedName("height") val height: Int = 180,
   @SerializedName("budget") val budget: String? = "medium",
-  @SerializedName("cuisine") val cuisine: String = "asian;italian;mexican;finnish;american",
+  @SerializedName("cuisine") val cuisine: String = "",
   @SerializedName("diet") val diet: String? = null,
   @SerializedName("payment") val payment: String? = null
 )

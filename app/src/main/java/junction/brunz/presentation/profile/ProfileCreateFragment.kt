@@ -1,7 +1,6 @@
 package junction.brunz.presentation.profile
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,19 +26,27 @@ class ProfileCreateFragment: Fragment() {
 
     doneBtn.setOnClickListener {
       val user = UserModel(
-        displayName = displayName.text.toString(),
-        birthYear = birthYear.text.toString().toInt(),
+        displayName = displayName.text.toString().takeIf { it.isNotEmpty() },
+        birthYear = birthYear.text.toString().takeIf { it.isNotEmpty() }?.toInt() ?: -1,
         cuisine = listOfNotNull(
           if (asianCuisine.isChecked) "asian" else null,
           if (italianCuisine.isChecked) "italian" else null,
           if (mexicanCuisine.isChecked) "mexican" else null,
           if (finnishCuisine.isChecked) "finnish" else null,
           if (americanCuisine.isChecked) "american" else null,
-        ).joinToString(separator = ";"),
+        ).joinToString(separator = ";") {
+          it.capitalize()
+        },
         diet = listOfNotNull(
           if (veganDiet.isChecked) "vegan" else null,
           if (vegetarianDiet.isChecked) "vegetarian" else null
-        ).joinToString(separator = ";").takeIf { it.isNotEmpty() }
+        ).joinToString(separator = ";").takeIf { it.isNotEmpty() },
+        budget = when (budgetSlider.value.toInt()) {
+          1 -> "low"
+          2 -> "medium"
+          3 -> "high"
+          else -> null
+        }
       )
 
       AitoRepository.createUser(user)

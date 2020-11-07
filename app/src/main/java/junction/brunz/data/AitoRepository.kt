@@ -47,14 +47,7 @@ object AitoRepository {
               PrepositionRequest.SimilarityOperatorRequest(
                 similarity = PrepositionRequest.AtomicOperatorRequest(
                   atomic = PrepositionRequest.CompositePrepositionRequest(
-                    PrepositionRequest.QueryPrepositionRequest(
-                      "cuisine", "American"
-                    ),
-                    PrepositionRequest.QueryPrepositionRequest(
-                      "cuisine", PrepositionRequest.HasOperatorRequest(
-                        has = "Fast_Food"
-                      )
-                    )
+                    *getCurrentUserCuisinePreposition()
                   )
                 )
               )
@@ -66,6 +59,21 @@ object AitoRepository {
           .map { it.hits }
       }
     }
+  }
+
+  private fun getCurrentUserCuisinePreposition(): Array<PrepositionRequest> {
+    val cuisines = currentUser.cuisine.split(";")
+      .filter { it.isNotEmpty() }
+      .takeIf { it.isNotEmpty() }
+      ?: listOf("International")
+
+    return cuisines.map {
+      PrepositionRequest.QueryPrepositionRequest(
+        "cuisine", PrepositionRequest.HasOperatorRequest(
+          has = it
+        )
+      )
+    }.toTypedArray()
   }
 
   fun createUser(user: UserModel = UserModel()): Single<UserModel> {
