@@ -7,15 +7,19 @@ import com.google.gson.annotations.SerializedName
  */
 sealed class OperatorRequest {
 
-  data class AndOperatorRequestModel(
+  data class AtomicOperatorRequest(
+    @SerializedName("\$atomic") val atomic: PrepositionRequest
+  ) : OperatorRequest()
+
+  data class AndOperatorRequest(
     @SerializedName("\$and") val and: List<OperatorRequest>
   ) : OperatorRequest()
 
-  data class LteOperatorRequestModel(
+  data class LteOperatorRequest(
     @SerializedName("\$lte") val lte: Double
   ) : OperatorRequest()
 
-  data class GteOperatorRequestModel(
+  data class GteOperatorRequest(
     @SerializedName("\$gte") val gte: Double
   ) : OperatorRequest()
 }

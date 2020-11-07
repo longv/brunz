@@ -2,6 +2,7 @@ package junction.brunz.data
 
 import io.reactivex.Single
 import junction.brunz.data.model.base.OperatorRequest
+import junction.brunz.data.model.base.PrepositionRequest
 import junction.brunz.data.model.base.RecommendRequest
 import junction.brunz.data.model.place.PlaceModel
 import junction.brunz.data.network.AitoApi
@@ -21,9 +22,9 @@ object AitoRepository {
         val request = RecommendRequest(
           from = "ratings",
           recommend = "placeID",
-          goal = mapOf(
-            "rating" to OperatorRequest.GteOperatorRequestModel(gte = 1.0)
-          ),
+          goal = PrepositionRequest().apply {
+            put("rating", OperatorRequest.GteOperatorRequest(gte = 1.0))
+          },
           limit = 5
         )
         AitoApi.get().getRecommendPlaces(request)

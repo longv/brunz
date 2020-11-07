@@ -8,6 +8,12 @@ import com.google.gson.annotations.SerializedName
 data class RecommendRequest(
   @SerializedName("from") val from: String,
   @SerializedName("recommend") val recommend: String,
-  @SerializedName("goal") val goal: Map<String, OperatorRequest>,
-  @SerializedName("limit") val limit: Int
-)
+  @SerializedName("goal") val goal: PrepositionRequest,
+  @SerializedName("orderBy") val orderBy: String = "",
+  @SerializedName("limit") val limit: Int = 10
+) {
+
+  fun orderBySimilarity() = this.copy(
+    orderBy = "\$similarity"
+  )
+}
