@@ -16,11 +16,7 @@ import kotlinx.android.synthetic.main.fragment_profile_init.*
  */
 class ProfileInitFragment : Fragment() {
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     return inflater.inflate(R.layout.fragment_profile_init, container, false)
   }
 
@@ -28,18 +24,15 @@ class ProfileInitFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
 
     emptyProfileBtn.setOnClickListener {
-      findNavController().navigate(R.id.action_profileInitFragment_to_homeFragment)
+      AitoRepository.createUser()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe { _, _ ->
+          findNavController().navigate(R.id.action_profileInitFragment_to_homeFragment)
+        }
     }
 
     profileBtn.setOnClickListener {
-      //findNavController().navigate(R.id.action_splashFragment_to_createProfileFragment)
-
-      AitoRepository.getRecommendPlaces()
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe { result, _ ->
-          println("HELOOOOOOOOOOOO")
-          println(result)
-        }
+      findNavController().navigate(R.id.action_profileInitFragment_to_profileCreateFragment)
     }
   }
 }

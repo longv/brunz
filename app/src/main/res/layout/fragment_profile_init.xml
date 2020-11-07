@@ -6,30 +6,62 @@
   android:layout_height="match_parent"
   tools:context=".presentation.profile.ProfileInitFragment">
 
-  <com.google.android.material.button.MaterialButton
-    android:id="@+id/emptyProfileBtn"
+  <TextView
+    android:id="@+id/title"
+    style="@style/Header"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="32dp"
-    android:text="Surprise Me"
-    app:layout_constraintBottom_toTopOf="@+id/guideline"
+    android:layout_marginTop="64dp"
+    android:gravity="center"
+    android:padding="16dp"
+    android:text="Take a quick tour or create profile for better experience"
     app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent" />
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
-  <com.google.android.material.button.MaterialButton
-    android:id="@+id/profileBtn"
+  <ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:adjustViewBounds="true"
+    android:scaleType="fitXY"
+    android:src="@drawable/ic_bush"
+    app:layout_constraintBottom_toBottomOf="@id/goOutImg"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    tools:ignore="ContentDescription" />
+
+  <ImageView
+    android:id="@+id/goOutImg"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="32dp"
+    android:adjustViewBounds="true"
+    android:scaleType="fitXY"
+    android:src="@drawable/ic_go_out"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/title"
+    tools:ignore="ContentDescription" />
+
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/emptyProfileBtn"
+    style="@style/Button.Rounded.Primary"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="64dp"
+    android:text="Surprise Me"
+    app:layout_constraintEnd_toEndOf="@+id/profileBtn"
+    app:layout_constraintStart_toStartOf="@+id/profileBtn"
+    app:layout_constraintTop_toBottomOf="@+id/goOutImg" />
+
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/profileBtn"
+    style="@style/Button.Rounded.Outline.Primary"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
     android:text="Create Profile"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/guideline" />
-
-  <androidx.constraintlayout.widget.Guideline
-    android:id="@+id/guideline"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    app:layout_constraintGuide_percent="0.5" />
+    app:layout_constraintTop_toBottomOf="@+id/emptyProfileBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
