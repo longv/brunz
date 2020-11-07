@@ -2,7 +2,6 @@ package junction.brunz.data
 
 import android.util.Log
 import io.reactivex.Single
-import junction.brunz.data.model.base.OperatorRequest
 import junction.brunz.data.model.base.PrepositionRequest
 import junction.brunz.data.model.base.RecommendRequest
 import junction.brunz.data.model.base.SearchRequest
@@ -10,7 +9,6 @@ import junction.brunz.data.model.place.PlaceModel
 import junction.brunz.data.model.user.UserModel
 import junction.brunz.data.network.AitoApi
 import junction.brunz.presentation.profile.ProfileCreateFragment
-import java.util.*
 
 /**
  * Created by Long Vu on 7.11.2020
@@ -28,10 +26,40 @@ object AitoRepository {
       } else {
         val request = RecommendRequest(
           from = "ratings",
-          recommend = "placeID",
-          goal = PrepositionRequest().apply {
-            put("rating", OperatorRequest.GteOperatorRequest(gte = 1.0))
-          },
+          get = "placeID",
+          orderBy = PrepositionRequest.MultiplyOperatorRequest(
+            multiply = listOf(
+              PrepositionRequest.ProbabilityOperatorRequest(
+                p = PrepositionRequest.ContextOperatorRequest(
+                  context = PrepositionRequest.QueryPrepositionRequest(
+                    "rating", PrepositionRequest.AtomicOperatorRequest(
+                      atomic = PrepositionRequest.CompositePrepositionRequest(
+                        PrepositionRequest.GtOperatorRequest(
+                          gt = 0.5
+                        ),
+                        PrepositionRequest.LteOperatorRequest(
+                          lte = 2.5
+                        )
+                      )
+                    ))
+                )
+              ),
+              PrepositionRequest.SimilarityOperatorRequest(
+                similarity = PrepositionRequest.AtomicOperatorRequest(
+                  atomic = PrepositionRequest.CompositePrepositionRequest(
+                    PrepositionRequest.QueryPrepositionRequest(
+                      "cuisine", "American"
+                    ),
+                    PrepositionRequest.QueryPrepositionRequest(
+                      "cuisine", PrepositionRequest.HasOperatorRequest(
+                        has = "Fast_Food"
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          ),
           limit = 5
         )
         AitoApi.get().getRecommendPlaces(request)
@@ -53,9 +81,7 @@ object AitoRepository {
   fun getUser(userId: String): Single<UserModel> {
     val request = SearchRequest(
       from = "users",
-      where = PrepositionRequest().apply {
-        put("userID", userId)
-      }
+      where = PrepositionRequest.QueryPrepositionRequest("userID", userId)
     )
     return AitoApi.get().getUser(request)
       .map { it.hits.firstOrNull() ?: error("User with id $userId not found!") }

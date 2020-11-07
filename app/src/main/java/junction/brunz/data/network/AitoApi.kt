@@ -14,7 +14,7 @@ import retrofit2.http.POST
  */
 interface AitoApi {
 
-  @POST("api/v1/_recommend")
+  @POST("api/v1/_query")
   fun getRecommendPlaces(@Body request: RecommendRequest): Single<PlacesResponse>
 
   @POST("api/v1/_search")
