@@ -3,7 +3,7 @@ package junction.brunz.data.model.base
 /**
  * Created by Long Vu on 7.11.2020
  */
-sealed class PrepositionRequest : HashMap<String, Any>() {
+sealed class PrepositionRequest : HashMap<String, Any?>() {
 
   class CompositePrepositionRequest(
     vararg prepositions: PrepositionRequest
@@ -18,7 +18,7 @@ sealed class PrepositionRequest : HashMap<String, Any>() {
 
   data class QueryPrepositionRequest(
     val key: String,
-    val value: Any
+    val value: Any?
   ) : PrepositionRequest() {
 
     init {
@@ -77,6 +77,15 @@ sealed class PrepositionRequest : HashMap<String, Any>() {
 
     init {
       put("\$and", and)
+    }
+  }
+
+  data class OrOperatorRequest(
+    val or: List<PrepositionRequest>
+  ) : PrepositionRequest() {
+
+    init {
+      put("\$or", or)
     }
   }
 

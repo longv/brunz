@@ -11,23 +11,23 @@
     tools:layout="@layout/fragment_splash">
     <action
       android:id="@+id/action_splashFragment_to_homeFragment"
-      app:popUpTo="@id/splashFragment"
-      app:popUpToInclusive="true"
       app:destination="@id/homeFragment"
       app:enterAnim="@anim/slide_in_right"
       app:exitAnim="@anim/slide_out_left"
       app:popEnterAnim="@anim/slide_in_left"
-      app:popExitAnim="@anim/slide_out_right" />
+      app:popExitAnim="@anim/slide_out_right"
+      app:popUpTo="@id/splashFragment"
+      app:popUpToInclusive="true" />
 
     <action
       android:id="@+id/action_splashFragment_to_profileInitFragment"
-      app:popUpTo="@id/splashFragment"
-      app:popUpToInclusive="true"
       app:destination="@id/profileInitFragment"
       app:enterAnim="@anim/slide_in_right"
       app:exitAnim="@anim/slide_out_left"
       app:popEnterAnim="@anim/slide_in_left"
-      app:popExitAnim="@anim/slide_out_right" />
+      app:popExitAnim="@anim/slide_out_right"
+      app:popUpTo="@id/splashFragment"
+      app:popUpToInclusive="true" />
   </fragment>
 
   <fragment
@@ -37,43 +37,78 @@
     tools:layout="@layout/fragment_profile_init">
     <action
       android:id="@+id/action_profileInitFragment_to_homeFragment"
-      app:popUpTo="@id/profileInitFragment"
-      app:popUpToInclusive="true"
       app:destination="@id/homeFragment"
       app:enterAnim="@anim/slide_in_right"
       app:exitAnim="@anim/slide_out_left"
       app:popEnterAnim="@anim/slide_in_left"
-      app:popExitAnim="@anim/slide_out_right" />
+      app:popExitAnim="@anim/slide_out_right"
+      app:popUpTo="@id/profileInitFragment"
+      app:popUpToInclusive="true" />
 
     <action
       android:id="@+id/action_profileInitFragment_to_profileCreateFragment"
-      app:popUpTo="@id/profileInitFragment"
       app:destination="@id/profileCreateFragment"
       app:enterAnim="@anim/slide_in_right"
       app:exitAnim="@anim/slide_out_left"
       app:popEnterAnim="@anim/slide_in_left"
-      app:popExitAnim="@anim/slide_out_right" />
+      app:popExitAnim="@anim/slide_out_right"
+      app:popUpTo="@id/profileInitFragment" />
   </fragment>
 
   <fragment
     android:id="@+id/homeFragment"
     android:name="junction.brunz.presentation.home.HomeFragment"
     android:label="HomeFragment"
-    tools:layout="@layout/fragment_home" />
+    tools:layout="@layout/fragment_home">
+    <action
+      android:id="@+id/action_homeFragment_to_teamSessionsFragment"
+      app:destination="@id/teamSessionsFragment"
+      app:enterAnim="@anim/slide_in_bottom"
+      app:popEnterAnim="@android:anim/fade_in"
+      app:popExitAnim="@android:anim/fade_out" />
+  </fragment>
 
   <fragment
     android:id="@+id/profileCreateFragment"
     android:name="junction.brunz.presentation.profile.ProfileCreateFragment"
     android:label="ProfileCreateFragment"
-    tools:layout="@layout/fragment_profile_create" >
+    tools:layout="@layout/fragment_profile_create">
     <action
       android:id="@+id/action_profileCreateFragment_to_homeFragment"
-      app:popUpTo="@id/profileInitFragment"
-      app:popUpToInclusive="true"
       app:destination="@id/homeFragment"
       app:enterAnim="@anim/slide_in_right"
       app:exitAnim="@anim/slide_out_left"
       app:popEnterAnim="@anim/slide_in_left"
-      app:popExitAnim="@anim/slide_out_right"/>
+      app:popExitAnim="@anim/slide_out_right"
+      app:popUpTo="@id/profileInitFragment"
+      app:popUpToInclusive="true" />
+  </fragment>
+
+  <fragment
+    android:id="@+id/teamSuggestionSessionFragment"
+    android:name="junction.brunz.presentation.team.TeamSuggestionSessionFragment"
+    android:label="TeamFragment"
+    tools:layout="@layout/fragment_team_suggestion_session">
+    <argument
+      android:name="sessionId"
+      app:argType="string" />
+
+    <argument
+      android:name="suggestedPlaceIds"
+      app:argType="string" />
+  </fragment>
+
+  <fragment
+    android:id="@+id/teamSessionsFragment"
+    android:name="junction.brunz.presentation.team.TeamSessionsFragment"
+    android:label="TeamSessionsFragment"
+    tools:layout="@layout/fragment_team_sessions">
+    <action
+      android:id="@+id/action_teamSessionsFragment_to_teamSuggestionSessionFragment"
+      app:destination="@id/teamSuggestionSessionFragment"
+      app:enterAnim="@anim/slide_in_right"
+      app:exitAnim="@anim/slide_out_left"
+      app:popEnterAnim="@anim/slide_in_left"
+      app:popExitAnim="@anim/slide_out_right" />
   </fragment>
 </navigation>

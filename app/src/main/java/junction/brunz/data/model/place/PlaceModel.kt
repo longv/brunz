@@ -7,6 +7,7 @@ import kotlin.random.Random
  * Created by Long Vu on 7.11.2020
  */
 data class PlaceModel(
+  @SerializedName("placeID") val placeId: String,
   @SerializedName("cuisine") val cuisine: String?,
   @SerializedName("parking_lot") val parkingLot: String?,
   @SerializedName("latitude") val latitude: Double?,

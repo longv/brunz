@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -32,16 +33,19 @@ class HomeFragment : Fragment() {
       adapter = placeAdapter
     }
 
+    teamBtn.setOnClickListener {
+      findNavController().navigate(R.id.action_homeFragment_to_teamSessionsFragment)
+    }
+
     populateRecommendPlaces()
   }
 
   @SuppressLint("CheckResult")
   private fun populateRecommendPlaces() {
-    AitoRepository.getRecommendPlaces()
+    AitoRepository.getPersonalRecommendPlaces()
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe { result, e ->
         placeAdapter.update(result)
-
         if (e != null) {
           Snackbar.make(requireView(), "An unknown error has occurred", Snackbar.LENGTH_SHORT)
         }

@@ -8,6 +8,7 @@ import com.google.gson.annotations.SerializedName
 data class RecommendRequest(
   @SerializedName("from") val from: String,
   @SerializedName("get") val get: String,
+  @SerializedName("where") val where: PrepositionRequest? = null,
   @SerializedName("goal") val goal: PrepositionRequest? = null,
   @SerializedName("orderBy") val orderBy: PrepositionRequest? = null,
   @SerializedName("limit") val limit: Int = 10

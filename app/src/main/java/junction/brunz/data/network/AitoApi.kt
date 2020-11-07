@@ -4,8 +4,11 @@ import io.reactivex.Single
 import junction.brunz.data.model.base.RecommendRequest
 import junction.brunz.data.model.base.SearchRequest
 import junction.brunz.data.model.place.PlacesResponse
+import junction.brunz.data.model.session.SessionModel
+import junction.brunz.data.model.session.SessionVotesResponse
+import junction.brunz.data.model.session.SessionsResponse
 import junction.brunz.data.model.user.UserModel
-import junction.brunz.data.model.user.UserResponse
+import junction.brunz.data.model.user.UsersResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -18,7 +21,19 @@ interface AitoApi {
   fun getRecommendPlaces(@Body request: RecommendRequest): Single<PlacesResponse>
 
   @POST("api/v1/_search")
-  fun getUser(@Body request: SearchRequest): Single<UserResponse>
+  fun getPlaces(@Body request: SearchRequest): Single<PlacesResponse>
+
+  @POST("api/v1/_search")
+  fun getUsers(@Body request: SearchRequest): Single<UsersResponse>
+
+  @POST("api/v1/_search")
+  fun getTeamSessions(@Body request: SearchRequest): Single<SessionsResponse>
+
+  @POST("api/v1/data/sessions")
+  fun createTeamSession(@Body model: SessionModel): Single<SessionModel>
+
+  @POST("api/v1/_search")
+  fun getTeamSessionVotes(@Body request: SearchRequest): Single<SessionVotesResponse>
 
   @POST("api/v1/data/users")
   fun createUser(@Body model: UserModel): Single<UserModel>

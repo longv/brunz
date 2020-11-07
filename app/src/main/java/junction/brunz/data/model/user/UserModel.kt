@@ -25,10 +25,11 @@ data class UserModel(
   @SerializedName("religion") val religion: String = "none",
   @SerializedName("activity") val activity: String? = "none",
   @SerializedName("color") val color: String = "green",
-  @SerializedName("weight") val weight: Int = 65,
-  @SerializedName("height") val height: Int = 180,
+  @SerializedName("weight") val weight: Double = 65.0,
+  @SerializedName("height") val height: Double = 1.8,
   @SerializedName("budget") val budget: String? = "medium",
   @SerializedName("cuisine") val cuisine: String = "",
   @SerializedName("diet") val diet: String? = null,
+  @SerializedName("favourite") val favorite: String? = null,
   @SerializedName("payment") val payment: String? = null
 )
