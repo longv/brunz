@@ -1,4 +1,4 @@
-package junction.brunz.presentation.splash
+package junction.brunz.presentation.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,26 +9,26 @@ import androidx.navigation.fragment.findNavController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import junction.brunz.R
 import junction.brunz.data.AitoRepository
-import kotlinx.android.synthetic.main.fragment_splash.*
+import kotlinx.android.synthetic.main.fragment_profile_init.*
 
 /**
  * Created by Long Vu on 6.11.2020
  */
-class SplashFragment : Fragment() {
+class ProfileInitFragment : Fragment() {
 
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
   ): View? {
-    return inflater.inflate(R.layout.fragment_splash, container, false)
+    return inflater.inflate(R.layout.fragment_profile_init, container, false)
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
     emptyProfileBtn.setOnClickListener {
-      findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+      findNavController().navigate(R.id.action_profileInitFragment_to_homeFragment)
     }
 
     profileBtn.setOnClickListener {

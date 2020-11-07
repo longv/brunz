@@ -3,14 +3,14 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/nav_graph"
-  app:startDestination="@id/splashFragment">
+  app:startDestination="@id/profileInitFragment">
   <fragment
-    android:id="@+id/splashFragment"
-    android:name="junction.brunz.presentation.splash.SplashFragment"
-    android:label="SplashFragment"
-    tools:layout="@layout/fragment_splash">
+    android:id="@+id/profileInitFragment"
+    android:name="junction.brunz.presentation.profile.ProfileInitFragment"
+    android:label="ProfileInitFragment"
+    tools:layout="@layout/fragment_profile_init">
     <action
-      android:id="@+id/action_splashFragment_to_homeFragment"
+      android:id="@+id/action_profileInitFragment_to_homeFragment"
       app:destination="@id/homeFragment"
       app:enterAnim="@anim/slide_in_right"
       app:exitAnim="@anim/slide_out_left"
@@ -18,8 +18,8 @@
       app:popExitAnim="@anim/slide_out_right" />
 
     <action
-      android:id="@+id/action_splashFragment_to_createProfileFragment"
-      app:destination="@id/createProfileFragment"
+      android:id="@+id/action_profileInitFragment_to_profileCreateFragment"
+      app:destination="@id/profileCreateFragment"
       app:enterAnim="@anim/slide_in_right"
       app:exitAnim="@anim/slide_out_left"
       app:popEnterAnim="@anim/slide_in_left"
@@ -30,11 +30,11 @@
     android:id="@+id/homeFragment"
     android:name="junction.brunz.presentation.home.HomeFragment"
     android:label="HomeFragment"
-    tools:layout="@layout/fragment_home"></fragment>
+    tools:layout="@layout/fragment_home" />
 
   <fragment
-    android:id="@+id/createProfileFragment"
-    android:name="junction.brunz.presentation.profile.CreateProfileFragment"
-    android:label="CreateProfileFragment"
-    tools:layout="@layout/fragment_create_profile" />
+    android:id="@+id/profileCreateFragment"
+    android:name="junction.brunz.presentation.profile.ProfileCreateFragment"
+    android:label="ProfileCreateFragment"
+    tools:layout="@layout/fragment_profile_create" />
 </navigation>
