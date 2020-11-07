@@ -52,8 +52,7 @@ object AitoRepository {
                 )
               )
             )
-          ),
-          limit = 5
+          )
         )
         AitoApi.get().getRecommendPlaces(request)
           .map { it.hits }

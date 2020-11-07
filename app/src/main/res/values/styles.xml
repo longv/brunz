@@ -30,9 +30,27 @@
     <item name="android:textColor">@color/eclipse</item>
   </style>
 
+  <style name="Title.Bold">
+    <item name="android:fontFamily">@font/montserrat_bold</item>
+    <item name="android:textSize">18sp</item>
+    <item name="android:textColor">@color/eclipse</item>
+  </style>
+
   <style name="Body">
     <item name="android:fontFamily">@font/montserrat_regular</item>
     <item name="android:textSize">15sp</item>
+    <item name="android:textColor">@color/eclipse</item>
+  </style>
+
+  <style name="Body.Bold">
+    <item name="android:fontFamily">@font/montserrat_bold</item>
+    <item name="android:textSize">15sp</item>
+    <item name="android:textColor">@color/eclipse</item>
+  </style>
+
+  <style name="Meta">
+    <item name="android:fontFamily">@font/montserrat_bold</item>
+    <item name="android:textSize">12sp</item>
     <item name="android:textColor">@color/eclipse</item>
   </style>
 
