@@ -9,5 +9,5 @@ data class SearchRequest(
   @SerializedName("from") val from: String,
   @SerializedName("where") val where: PrepositionRequest,
   @SerializedName("orderBy") val orderBy: String? = null,
-  @SerializedName("limit") val limit: Int = 10
+  @SerializedName("limit") val limit: Int? = null
 )

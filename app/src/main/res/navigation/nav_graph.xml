@@ -96,6 +96,11 @@
     <argument
       android:name="suggestedPlaceIds"
       app:argType="string" />
+
+    <argument
+      android:name="chosenPlaceId"
+      app:argType="string"
+      app:nullable="true" />
   </fragment>
 
   <fragment

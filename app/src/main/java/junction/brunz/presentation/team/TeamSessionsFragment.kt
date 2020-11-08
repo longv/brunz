@@ -24,7 +24,8 @@ class TeamSessionsFragment : Fragment() {
     TeamSessionAdapter(onSessionSelected = {
       val bundle = bundleOf(
         "sessionId" to it.sessionId,
-        "suggestedPlaceIds" to it.suggestedPlaceIds
+        "suggestedPlaceIds" to it.suggestedPlaceIds,
+        "chosenPlaceId" to it.chosenPlaceId
       )
       findNavController().navigate(R.id.action_teamSessionsFragment_to_teamSuggestionSessionFragment, bundle)
     })

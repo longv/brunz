@@ -1,12 +1,15 @@
 package junction.brunz.data
 
 import android.util.Log
+import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import junction.brunz.data.model.base.PrepositionRequest
 import junction.brunz.data.model.base.RecommendRequest
 import junction.brunz.data.model.base.SearchRequest
 import junction.brunz.data.model.place.PlaceModel
 import junction.brunz.data.model.session.SessionModel
+import junction.brunz.data.model.session.SessionVoteModel
 import junction.brunz.data.model.user.UserModel
 import junction.brunz.data.network.AitoApi
 import junction.brunz.presentation.profile.ProfileCreateFragment
@@ -17,6 +20,12 @@ import junction.brunz.presentation.profile.ProfileCreateFragment
 object AitoRepository {
 
   private lateinit var currentUser: UserModel
+
+  private var sessions: List<SessionModel> = emptyList()
+
+  private var teamMembers: List<UserModel> = emptyList()
+
+  private var suggestedPlaces: List<PlaceModel> = emptyList()
 
   fun getTeamRecommendPlaces(): Single<List<PlaceModel>> {
     return getTeamMembers().flatMap { teamMembers ->
@@ -71,6 +80,54 @@ object AitoRepository {
     )
     return AitoApi.get().getPlaces(request)
       .map { it.hits }
+      .doOnSuccess { suggestedPlaces = it }
+  }
+
+  fun voteForTeamSession(sessionId: String, placeId: String): Completable {
+    val newFavorite = currentUser.favorite?.plus(";$placeId")
+
+    val placeCuisines = suggestedPlaces.first { it.placeId == placeId }
+      .cuisine?.split(";")?.filter { it.isNotEmpty() && it != "International" } ?: emptyList()
+    val userCuisines = currentUser.cuisine.split(";").filter { it.isNotEmpty() }
+    val newCuisines = userCuisines.plus(placeCuisines).distinct().joinToString(";") { it.capitalize() }
+
+    return updateUser(currentUser.copy(cuisine = newCuisines, favorite = newFavorite))
+      .flatMap {
+        val model = SessionVoteModel(
+          sessionId = sessionId,
+          userId = currentUser.userId,
+          vote = placeId
+        )
+        AitoApi.get().createTeamSessionVote(model)
+      }
+      .ignoreElement()
+  }
+
+  fun getSessionResult(sessionId: String): Maybe<PlaceModel> {
+    val request = SearchRequest(
+      from = "sessionVote",
+      where = PrepositionRequest.QueryPrepositionRequest("sessionID", sessionId)
+    )
+    return AitoApi.get().getTeamSessionVotes(request)
+      .map { it.hits }
+      .flatMapMaybe { votes ->
+        val voteDone = votes.size >= teamMembers.size
+        if (voteDone) {
+          val chosenPlaceId = votes.groupBy { it.vote }
+            .entries.maxBy { it.value.size }!!
+            .key
+          val session = sessions.first { it.sessionId == sessionId }.copy(chosenPlaceId = chosenPlaceId, isOpen = false)
+
+          updateSession(session)
+            .flatMapMaybe {
+              Maybe.just(
+                suggestedPlaces.first { it.placeId == chosenPlaceId }
+              )
+            }
+        } else {
+          Maybe.empty()
+        }
+      }
   }
 
   fun getPersonalRecommendPlaces(): Single<List<PlaceModel>> {
@@ -121,6 +178,16 @@ object AitoRepository {
       }
   }
 
+  fun updateUser(user: UserModel): Single<UserModel> {
+    val request = SearchRequest(
+      from = "users",
+      where = PrepositionRequest.QueryPrepositionRequest("userID", user.userId)
+    )
+    return AitoApi.get().delete(request)
+      .ignoreElement()
+      .andThen(createUser(user))
+  }
+
   fun getUser(userId: String): Single<UserModel> {
     val request = SearchRequest(
       from = "users",
@@ -144,6 +211,7 @@ object AitoRepository {
     )
     return AitoApi.get().getUsers(request)
       .map { it.hits }
+      .doOnSuccess { teamMembers = it }
   }
 
   fun getTeamSessions(): Single<List<SessionModel>> {
@@ -172,7 +240,19 @@ object AitoRepository {
         }
       }.map { sessions ->
         sessions.sortedByDescending { it.isOpen }
+      }.doOnSuccess {
+        sessions = it
       }
+  }
+
+  private fun updateSession(session: SessionModel): Single<SessionModel> {
+    val request = SearchRequest(
+      from = "sessions",
+      where = PrepositionRequest.QueryPrepositionRequest("sessionID", session.sessionId)
+    )
+    return AitoApi.get().delete(request)
+      .ignoreElement()
+      .andThen(AitoApi.get().createTeamSession(session))
   }
 
   private fun List<PrepositionRequest>.createCuisinePreposition(): PrepositionRequest {

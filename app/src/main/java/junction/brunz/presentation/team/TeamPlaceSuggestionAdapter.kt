@@ -9,11 +9,13 @@ import junction.brunz.data.model.place.PlaceModel
 /**
  * Created by Long Vu on 7.11.2020
  */
-class TeamPlaceSuggestionAdapter : RecyclerView.Adapter<TeamPlaceSuggestionViewHolder>() {
+class TeamPlaceSuggestionAdapter(
+  private val onVoted: () -> Unit = {}
+) : RecyclerView.Adapter<TeamPlaceSuggestionViewHolder>() {
 
   private var items: List<PlaceModel> = emptyList()
 
-  private var votedItem: PlaceModel? = null
+  var votedItem: PlaceModel? = null
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamPlaceSuggestionViewHolder {
     val view = LayoutInflater.from(parent.context).inflate(R.layout.item_team_place_suggestion, parent, false)
@@ -24,6 +26,7 @@ class TeamPlaceSuggestionAdapter : RecyclerView.Adapter<TeamPlaceSuggestionViewH
     val currentModel = items[position]
     holder.bind(currentModel, currentModel.placeId == votedItem?.placeId) {
       votedItem = it
+      onVoted()
       notifyDataSetChanged()
     }
   }
