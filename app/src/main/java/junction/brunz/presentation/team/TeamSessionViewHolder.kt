@@ -19,7 +19,7 @@ class TeamSessionViewHolder(item: View) : RecyclerView.ViewHolder(item), LayoutC
   private val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
   fun bind(session: SessionModel, onSessionSelected: (SessionModel) -> Unit = {}) {
-    itemView.title.text = "Session: ${session.sessionId.take(5)}"
+    itemView.title.text = "Session: ${session.sessionId}"
     itemView.description.text = "Date: ${formatDate(session.createdDate.toLong())}"
     itemView.setOnClickListener {
       onSessionSelected(session)

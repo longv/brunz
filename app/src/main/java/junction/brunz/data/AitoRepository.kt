@@ -215,34 +215,52 @@ object AitoRepository {
   }
 
   fun getTeamSessions(): Single<List<SessionModel>> {
-    val request = SearchRequest(
+    val openSessionRequest = SearchRequest(
       from = "sessions",
-      where = PrepositionRequest.QueryPrepositionRequest("teamID", currentUser.groupId)
+      where = PrepositionRequest.AndOperatorRequest(
+        and = listOf(
+          PrepositionRequest.QueryPrepositionRequest("teamID", currentUser.groupId),
+          PrepositionRequest.QueryPrepositionRequest("isOpen", true)
+        )
+      )
     )
-    return AitoApi.get().getTeamSessions(request)
+    val openSession = AitoApi.get().getTeamSessions(openSessionRequest)
       .map { it.hits }
-      .flatMap { sessions ->
-        val openingSession = sessions.find { it.isOpen }
-        if (openingSession == null) {
-          getTeamRecommendPlaces()
-            .flatMap { places ->
-              val sessionModel = SessionModel(
-                groupId = currentUser.groupId.orEmpty(),
-                isOpen = true,
-                suggestedPlaceIds = places.joinToString(";") { it.placeId }
-              )
-              AitoApi.get().createTeamSession(sessionModel)
-            }.map { newSession ->
-              sessions.plus(newSession)
-            }
-        } else {
-          Single.just(sessions)
-        }
-      }.map { sessions ->
-        sessions.sortedByDescending { it.isOpen }
-      }.doOnSuccess {
-        sessions = it
+
+    val otherSessionsRequest = SearchRequest(
+      from = "sessions",
+      where = PrepositionRequest.AndOperatorRequest(
+        and = listOf(
+          PrepositionRequest.QueryPrepositionRequest("teamID", currentUser.groupId),
+          PrepositionRequest.QueryPrepositionRequest("isOpen", false)
+        )
+      )
+    )
+    val otherSessions = AitoApi.get().getTeamSessions(otherSessionsRequest)
+      .map { it.hits }
+
+    return openSession.flatMap { sessions ->
+      val openingSession = sessions.firstOrNull()
+      if (openingSession == null) {
+        getTeamRecommendPlaces()
+          .flatMap { places ->
+            val sessionModel = SessionModel(
+              groupId = currentUser.groupId.orEmpty(),
+              isOpen = true,
+              suggestedPlaceIds = places.joinToString(";") { it.placeId }
+            )
+            AitoApi.get().createTeamSession(sessionModel)
+          }
+      } else {
+        Single.just(openingSession)
       }
+    }.flatMap { currentOpenSession ->
+      otherSessions.map { sessions ->
+        listOf(currentOpenSession).plus(sessions)
+      }
+    }.doOnSuccess {
+      sessions = it
+    }
   }
 
   private fun updateSession(session: SessionModel): Single<SessionModel> {
