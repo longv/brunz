@@ -54,6 +54,7 @@ class TeamSuggestionSessionFragment : Fragment() {
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe { result, e ->
         if (chosenPlaceId == null) {
+          Picasso.get().load("https://images.pexels.com/photos/2575835/pexels-photo-2575835.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260").fit().into(placeImg)
           showSuggestions(result)
         } else {
           result.find { it.placeId == chosenPlaceId }?.also {
@@ -118,7 +119,6 @@ class TeamSuggestionSessionFragment : Fragment() {
 
   private fun showWinner(place: PlaceModel) {
     viewSwitcher.displayedChild = 1
-
     Picasso.get().load(place.getImageUrl()).fit().into(placeImg)
     placeTitle.text = place.name.orEmpty()
     description.text = "${place.cuisine} cuisine"
